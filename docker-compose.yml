@@ -1,0 +1,28 @@
+
+services:
+  postgres:
+    container_name: hotel_postgres
+    image: postgres
+    environment:
+      POSTGRES_DB: hotelmanagement
+      POSTGRES_USER: hoteluser
+      POSTGRES_PASSWORD: hotelpass123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - hotel_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hoteluser -d hotelmanagement"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  hotel_network:
+    driver: bridge
